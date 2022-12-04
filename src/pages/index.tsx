@@ -56,14 +56,14 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div className='xl:h-screen bg-gradient-to-tl from-green-900 via-slate-700 to-pink-800'>
         <div className="flex overflow-hidde xl:max-h-screen">
           <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop">
 
             {/* AQUI VAI O POPUP */}
 
           </div>
-          <div id="main-content" className="h-full w-full relative overflow-y-auto bg-gradient-to-tl from-green-900 via-slate-700 to-pink-800">
+          <div id="main-content" className="h-full w-full relative overflow-y-auto ">
             <main>
               <div className="pt-6 px-4">
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
@@ -137,8 +137,8 @@ export default function Home() {
                                     Deleta seleção -&gt; Vertice | Aresta
                                   </td>
                                 </tr>
+                                  */}
                               
-                                */}
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -230,7 +230,7 @@ export default function Home() {
               </div>
             </main>
 
-            <p className="text-center text-sm text-gray-500 my-10">
+            <p className="text-center text-sm text-white my-5">
               &copy; 2022-2022 <a href="https://github.com/alverad-katsuro/grafos-front" className="hover:underline" target="_blank">Alverad Katsuro</a>. All rights reserved.
             </p>
           </div>
