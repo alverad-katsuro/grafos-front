@@ -56,7 +56,7 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div className="">
         <div className="flex overflow-hidden bg-white xl:max-h-screen">
           <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
           <div id="main-content" className="h-full w-full bg-gray-50 relative overflow-y-auto ">
@@ -65,7 +65,7 @@ export default function Home() {
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-1">
                     <div id="main-chart" className="h-full w-full flex">
-                      <div ref={grafoDiv} onMouseEnter={() => changeDraw(true)} onMouseLeave={() => changeDraw(false)} id="graphId">
+                      <div ref={grafoDiv} onMouseEnter={() => changeDraw(true)} onMouseLeave={() => changeDraw(false)} className="w-full" id="graphId">
           
                       </div>
                     </div>
