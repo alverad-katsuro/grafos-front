@@ -34,12 +34,16 @@ export default function Home() {
     if (api == null) {
       console.log("bug")
     }
-    //var vertices = prompt("Digite os vertices")?.split(" ");
-    var vertices = ["a", "b"];
-    console.log(vertices)
-    //@ts-ignore
-    const resp = api.verificarAresta(vertices[0], vertices[1], grafo.Nodes, grafo.Edges);
-    //console.log(resp)
+    var vertices = prompt("Digite os vertices")?.split(" ");
+    if (vertices?.length == 2) {
+      var [verticeA, verticeB] = vertices;
+      const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges);
+      resp.then((e) => {
+        console.log("Existe um vertice entre" + verticeA + " e "+ verticeB +" : " + e);
+        alert("Existe um vertice entre" + verticeA + " e "+ verticeB +" : " + e)
+      
+      })
+    }
     //popup.current.hidden=false;
   }
 

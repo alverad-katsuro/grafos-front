@@ -9,13 +9,13 @@ export default class GrafoApi{
   }
 
   async verificarAresta(verticeA:string, verticeB:string, Nodes:DataSet<Node>, Edges: DataSet<Edge>): Promise<boolean> {
-    var teste = {
+    var grafo = {
       origem: verticeA,
       destino: verticeB,
       nodes: Nodes.get(),
       edges: Edges.get()
     }
-    const resp = (await this.api.post<boolean>("/matriz/verificarAresta/", teste)).data;
+    const resp = (await this.api.post<boolean>("/matriz/verificarAresta/", grafo)).data;
     return resp;
   }
 
