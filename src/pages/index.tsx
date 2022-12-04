@@ -63,7 +63,7 @@ export default function Home() {
             {/* AQUI VAI O POPUP */}
 
           </div>
-          <div id="main-content" className="h-full w-full relative overflow-y-auto ">
+          <div id="main-content" className="h-screen w-full relative overflow-y-auto ">
             <main>
               <div className="pt-6 px-4">
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
