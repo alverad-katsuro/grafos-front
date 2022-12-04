@@ -1,31 +1,73 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { BasicGraph } from '../components/BasicGraph'
-import styles from '../styles/Home.module.css'
+import { useEffect, useRef } from 'react';
+import { Edge, IdType, Options } from "vis-network";
+import { Grafo } from '../components/BasicGraph';
+import "node_modules/vis-network/dist/dist/vis-network.min.css"
+import { PopUp } from '../components/PopUp';
 
 export default function Home() {
-  var options = {
-    autoResize: true,
-    height: '100%',
-    width: '100%',
-    locale: 'pt-BR',
-    locales: "pt-br",
-    clickToUse: false
+  const isMatrix = useRef(null);
+  const isDigrafo = useRef(null);
+  const grafoDiv = useRef(null);
+  var inDraw:boolean = false;
+  const grafo: Grafo = new Grafo();
+
+  function changeDraw(entrou:boolean) {
+    inDraw = entrou;
+    console.log(inDraw);
   }
+  
+  function createNodeAresta() {
+    var nos = grafo.Grafo?.getSelectedNodes();
+    if (nos?.length == 2) {
+      //grafo.Edges.push({from:nos[0], to:nos[1]})
+      
+    }
+    console.log(grafo.Grafo?.getSelectedNodes())
+    grafo.Grafo?.on('click', function(params){
+      
+  }) 
+  }
+  
+
+  function changeDigrafo() {
+    //@ts-ignore
+    if (isDigrafo.current.checked) {
+      grafo.Digrafo = true;
+    } else {
+      grafo.Digrafo = false;
+    }
+  }
+
+  function deleteSelection() {
+    grafo.deleteSelection();
+  }
+ 
+  useEffect(() => {
+    {onkeydown = (e) => {
+      if (e.key == 'a') {
+        console.log(e)}}
+      }
+    
+    const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
+    grafo.Container = container;
+    console.log(grafo.Edges.get());
+    grafo.createGrafo();
+  })
+
   return (
     <>
       <div>
-
         <div className="flex overflow-hidden bg-white xl:max-h-screen">
-
           <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
           <div id="main-content" className="h-full w-full bg-gray-50 relative overflow-y-auto ">
             <main>
               <div className="pt-6 px-4">
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-1">
-                    <div id="main-chart" className="h-full w-full">
-                      {BasicGraph(options)}
+                    <div id="main-chart" className="h-full w-full flex">
+                      <div ref={grafoDiv} onMouseEnter={() => changeDraw(true)} onMouseLeave={() => changeDraw(false)} id="graphId">
+          
+                      </div>
                     </div>
                   </div>
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
@@ -53,43 +95,46 @@ export default function Home() {
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <div className="form-check">
-                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="flexCheckChecked" />
+                                      <input ref={isMatrix} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isMatrix" />
                                     </div>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    True -&gt; Matriz | False -&gt; Lista 
+                                    True -&gt; Matriz | False -&gt; Lista
                                   </td>
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <div className="form-check">
-                                      <input className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="flexCheckChecked" />
+                                      <input ref={isDigrafo} onClick={changeDigrafo} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isDigrafo" />
                                     </div>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
                                     True -&gt; Digrafo | False -&gt; Não digrafo
                                   </td>
                                 </tr>
+                                {/*
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={createNodeAresta} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Criar
                                     </button>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                  Vertice | Aresta
+                                    Vertice | Aresta
                                   </td>
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={deleteSelection} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Deletar
                                     </button>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                  Vertice | Aresta
+                                    Deleta seleção -&gt; Vertice | Aresta
                                   </td>
                                 </tr>
+                              
+                                */}
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -189,6 +234,5 @@ export default function Home() {
 
       </div>
     </>
-
   )
 }
