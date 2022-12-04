@@ -5,11 +5,11 @@ import { PopUp } from './PopUp';
 
 var nodesDefault: DataSet<Node> = new DataSet<Node>({});
 nodesDefault.add([
-    { id: 1, label: "Node 1" },
-    { id: 2, label: "Node 2" },
-    { id: 3, label: "Node 3" },
-    { id: 4, label: "Node 4" },
-    { id: 5, label: "Node 5" }
+    { id: 1, label: "a" },
+    { id: 2, label: "b" },
+    { id: 3, label: "c" },
+    { id: 4, label: "d" },
+    { id: 5, label: "e" }
 ]);
 
 const edgesDefault: DataSet<Edge> = new DataSet({});
@@ -155,7 +155,7 @@ export class Grafo {
 
 
 
-    private get Data(): Data {
+    public get Data(): Data {
         const data: Data = {
             nodes: this.nodes,
             edges: this.edges
