@@ -51,13 +51,12 @@ var optionsDefault: Options = {
         //@ts-ignore
         addNode: function (nodeData, callback) {
           nodeData.label = prompt("Digite um nome para o vertice");
-          nodeData.value = Number(prompt("Digite o valor do vertice"));
           callback(nodeData);
         },
         
         //@ts-ignore
         addEdge: function (edgeData, callback) {
-          edgeData.label = prompt("Digite um nome para o vertice");
+          edgeData.label = prompt("Digite um nome/valor para a aresta");
           edgeData.value = Number(edgeData.label);
           callback(edgeData);
       },

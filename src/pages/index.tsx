@@ -56,10 +56,14 @@ export default function Home() {
 
   return (
     <>
-      <div className="">
-        <div className="flex overflow-hidden bg-white xl:max-h-screen">
-          <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop"></div>
-          <div id="main-content" className="h-full w-full bg-gray-50 relative overflow-y-auto ">
+      <div>
+        <div className="flex overflow-hidde xl:max-h-screen">
+          <div className="bg-gray-900 opacity-50 hidden fixed inset-0 z-10" id="sidebarBackdrop">
+
+            {/* AQUI VAI O POPUP */}
+
+          </div>
+          <div id="main-content" className="h-full w-full relative overflow-y-auto bg-gradient-to-tl from-green-900 via-slate-700 to-pink-800">
             <main>
               <div className="pt-6 px-4">
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
