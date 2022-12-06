@@ -1,8 +1,6 @@
+import "node_modules/vis-network/dist/dist/vis-network.min.css";
 import { useEffect, useRef } from 'react';
-import { Edge, IdType, Options } from "vis-network";
 import { Grafo } from '../components/BasicGraph';
-import "node_modules/vis-network/dist/dist/vis-network.min.css"
-import { PopUp } from '../components/PopUp';
 import GrafoApi from './api/api';
 
 export default function Home() {
@@ -26,13 +24,12 @@ export default function Home() {
   useEffect(() => {   
     const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
     grafo.Container = container;
-    console.log(grafo.Edges.get());
     grafo.createGrafo();
   })
 
   function verificarAresta(){
     if (api == null) {
-      console.log("bug")
+      console.log("bug verificar aresta")
     }
     var vertices = prompt("Digite os vertices")?.split(" ");
     if (vertices?.length == 2) {
@@ -45,6 +42,20 @@ export default function Home() {
       })
     }
     //popup.current.hidden=false;
+  }
+
+  function classificarAresta(){
+    if (api == null) {
+      console.log("bug classificar aresta")
+    }
+    var origem = prompt("Digite a origem");
+    if (origem != null) {
+      const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges);
+      resp.then((e) => {
+        console.log("Classificação: \n" + e);
+        //alert("Classificação: \n" + e)
+      })
+    }
   }
 
   return (
@@ -180,6 +191,16 @@ export default function Home() {
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
                                     Realiza a busca em profundidade.
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                    <button onClick={classificarAresta} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    Classificação de arestas.
+                                    </button>
+                                  </td>
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                    Realiza a classificação de arestas
                                   </td>
                                 </tr>
                                 <tr className="bg-gray-50">

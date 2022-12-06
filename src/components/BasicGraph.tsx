@@ -14,11 +14,11 @@ nodesDefault.add([
 
 const edgesDefault: DataSet<Edge> = new DataSet({});
 edgesDefault.add([
-    { from: 1, to: 3, value:1, label:1},
-    { from: 1, to: 2, value:1, label:1},
-    { from: 2, to: 4, value:1, label:1},
-    { from: 2, to: 5, value:1, label:1},
-    { from: 3, to: 3, value:1, label:1}
+    { from: 1, to: 3, value:1.5, label:"1.5"},
+    { from: 1, to: 2, value:1.5, label:"1.5"},
+    { from: 2, to: 4, value:1.5, label:"1.5"},
+    { from: 2, to: 5, value:1.5, label:"1.5"},
+    { from: 3, to: 3, value:1.5, label:"1.5"}
 ]);
 
 var optionsDefault: Options = {
