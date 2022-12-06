@@ -134,7 +134,7 @@ export default function Home() {
                               
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={verificarAresta} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={verificarAresta} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
                                       Verificar Aresta
                                     </button>
                                   </td>
@@ -144,7 +144,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Lista de Adjacencia
                                     </button>
                                   </td>
@@ -154,7 +154,7 @@ export default function Home() {
                                 </tr>
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Contador
                                     </button>
                                   </td>
@@ -164,7 +164,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Verifica Grau
                                     </button>
                                   </td>
@@ -174,7 +174,7 @@ export default function Home() {
                                 </tr>
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Busca em Profundidade.
                                     </button>
                                   </td>
@@ -184,7 +184,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Busca em Largua.
                                     </button>
                                   </td>
@@ -194,7 +194,7 @@ export default function Home() {
                                 </tr>
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       AGM.
                                     </button>
                                   </td>
@@ -204,7 +204,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Dijkstra.
                                     </button>
                                   </td>
