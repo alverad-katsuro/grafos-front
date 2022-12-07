@@ -50,6 +50,8 @@ var optionsDefault: Options = {
         enabled: true,
         //@ts-ignore
         addNode: function (nodeData, callback) {
+          nodeData.id = Grafo.idCount;
+          Grafo.idCount++;
           nodeData.label = prompt("Digite um nome para o vertice");
           callback(nodeData);
         },
@@ -65,6 +67,7 @@ var optionsDefault: Options = {
 
 
 export class Grafo {
+    static idCount:number = 1000;
     private grafo?: Network;
     private digrafo: boolean = true;
     private options: Options;

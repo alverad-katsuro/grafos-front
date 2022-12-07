@@ -37,7 +37,7 @@ export default function Home() {
     const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
     grafo.Container = container;
     grafo.createGrafo();
-  }, [])
+  })
 
   function verificarAresta() {
     if (api == null) {
@@ -46,7 +46,6 @@ export default function Home() {
     var vertices = prompt("Digite os vertices")?.split(" ");
     if (vertices?.length == 2) {
       var [verticeA, verticeB] = vertices;
-      //@ts-ignore
       const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
@@ -291,7 +290,7 @@ export default function Home() {
                                 </tr>
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={console.log("aa")} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       AGM.
                                     </button>
                                   </td>
