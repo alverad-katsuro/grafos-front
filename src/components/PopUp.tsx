@@ -7,7 +7,7 @@ export class PopUp extends Component {
     open = false;
     setOpen = false;
 
-    constructor(props) {
+    constructor(props:any) {
         super(props)
     }
 

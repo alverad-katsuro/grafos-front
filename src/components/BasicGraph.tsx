@@ -64,7 +64,6 @@ var optionsDefault: Options = {
 }
 
 
-
 export class Grafo {
     private grafo?: Network;
     private digrafo: boolean = true;
