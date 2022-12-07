@@ -82,6 +82,25 @@ export default function Home() {
     }
   }
 
+  function prim() {
+    if (api == null) {
+      console.log("bug prim");
+    } else {
+      var origem = prompt("Digite a origem");
+      if (origem != null) {
+        //@ts-ignore
+        const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+        resp.then((e) => {
+          console.log("Prim: \n" + e);
+          setLogFunctions([
+            ...logFunctions,
+            `Prim a partide do v: ${origem} é ${e}`
+            ])
+        })
+      }
+    }
+  }
+
   function obterGrauVertice() {
     if (api == null) {
       console.log("bug classificar aresta")
@@ -113,6 +132,23 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `Lista de adj de ${origem} ${e}`
+          ])
+      })
+    }
+  }
+
+  function obterDijkstra() {
+    if (api == null) {
+      console.log("bug obterDijkstra")
+    }
+    var origem = prompt("Digite a origem");
+    if (origem != null) {
+      //@ts-ignore
+      const resp = api.obterDijkstra(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      resp.then((e) => {
+        setLogFunctions([
+          ...logFunctions,
+          `Caminho a partir de v ${origem} ${e}`
           ])
       })
     }
@@ -206,7 +242,7 @@ export default function Home() {
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <div className="form-check">
-                                      <input ref={isMatrix} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isMatrix" />
+                                      <input ref={isMatrix} defaultChecked={true} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isMatrix" />
                                     </div>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
@@ -216,7 +252,7 @@ export default function Home() {
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <div className="form-check">
-                                      <input ref={isDigrafo} onClick={changeDigrafo} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isDigrafo" />
+                                      <input ref={isDigrafo} defaultChecked={true} onClick={changeDigrafo} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isDigrafo" />
                                     </div>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
@@ -286,7 +322,7 @@ export default function Home() {
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
                                     <button onClick={buscaLargura} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Busca em Largua.
+                                      Busca em Larguara.
                                     </button>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
@@ -295,7 +331,7 @@ export default function Home() {
                                 </tr>
                                 <tr>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={prim} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       AGM.
                                     </button>
                                   </td>
@@ -305,7 +341,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={obterDijkstra} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Dijkstra.
                                     </button>
                                   </td>

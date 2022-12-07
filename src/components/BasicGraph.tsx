@@ -38,7 +38,7 @@ var optionsDefault: Options = {
     edges: {
         arrows: {
             to: {
-                enabled: false
+                enabled: true
             }
         }
     },

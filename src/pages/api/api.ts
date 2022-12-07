@@ -140,4 +140,36 @@ export default class GrafoApi{
   }
 
 
+  async prim(verticeA:string, Nodes:DataSet<Node>, Edges: DataSet<Edge>, matriz:boolean): Promise<string[]> {
+    var grafo = {
+      origem: verticeA,
+      nodes: Nodes.get(),
+      edges: Edges.get()
+    }
+    if (matriz) {
+      const resp = (await this.api.post<string[]>("/matriz/prim/", grafo)).data;
+      return resp;
+    } else {
+      const resp = (await this.api.post<string[]>("/listaAdjacencia/prim/", grafo)).data;
+      return resp;
+    }
+  }
+
+
+  async obterDijkstra(verticeA:string, Nodes:DataSet<Node>, Edges: DataSet<Edge>, matriz:boolean): Promise<string[]> {
+    var grafo = {
+      origem: verticeA,
+      nodes: Nodes.get(),
+      edges: Edges.get()
+    }
+    if (matriz) {
+      const resp = (await this.api.post<string[]>("/matriz/dijkstra/", grafo)).data;
+      return resp;
+    } else {
+      const resp = (await this.api.post<string[]>("/listaAdjacencia/dijkstra/", grafo)).data;
+      return resp;
+    }
+  }
+
+
 }
