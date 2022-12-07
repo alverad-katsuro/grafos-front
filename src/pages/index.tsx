@@ -54,7 +54,6 @@ export default function Home() {
         ...logFunctions,
         `Existe um vertice entre ${verticeA} e ${verticeB} : ${e}`
         ])
-        alert("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e)
 
       })
     }
@@ -73,6 +72,25 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `Foi gerado a classificação do grafo.`
+          ])
+        //alert("Classificação: \n" + e)
+      })
+    }
+  }
+
+  function obterGrauVertice() {
+    if (api == null) {
+      console.log("bug classificar aresta")
+    }
+    var origem = prompt("Digite a origem");
+    if (origem != null) {
+      //@ts-ignore
+      const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      resp.then((e) => {
+        console.log("Classificação: \n" + e);
+        setLogFunctions([
+          ...logFunctions,
+          `O grau de ${origem} é ${e}`
           ])
         //alert("Classificação: \n" + e)
       })
@@ -100,17 +118,14 @@ export default function Home() {
     if (api == null) {
       console.log("bug quantidadeVerticesArestas")
     }
-    var origem = prompt("Digite a origem");
-    if (origem != null) {
-      //@ts-ignore
-      const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix.current.checked);
-      resp.then((e) => {
-        setLogFunctions([
-          ...logFunctions,
-          `Quantidade de Vertices ${e.quantidadeVertice} Quantidade de Aresta ${e.quantidadeAresta}`
-          ])
-      })
-    }
+    //@ts-ignore
+    const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+    resp.then((e) => {
+      setLogFunctions([
+        ...logFunctions,
+        `Quantidade de Vertices ${e.quantidadeVertice} Quantidade de Aresta ${e.quantidadeAresta}`
+        ])
+    })
   }
 
   function buscaLargura() {
@@ -236,7 +251,7 @@ export default function Home() {
                                 </tr>
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={verificarAresta} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    <button onClick={obterGrauVertice} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                       Verifica Grau
                                     </button>
                                   </td>
