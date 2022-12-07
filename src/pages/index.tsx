@@ -46,6 +46,7 @@ export default function Home() {
     var vertices = prompt("Digite os vertices")?.split(" ");
     if (vertices?.length == 2) {
       var [verticeA, verticeB] = vertices;
+      //@ts-ignore
       const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
@@ -68,9 +69,13 @@ export default function Home() {
       const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
+        var resposta:string = "";
+        e.edges.map((edge) => {
+          resposta += `${(grafo.Nodes.get(edge.from))?.label} ${(grafo.Nodes.get(edge.to))?.label} ${edge.tipoAresta} `
+        })
         setLogFunctions([
           ...logFunctions,
-          `Foi gerado a classificação do grafo.`
+          `Foi gerado a classificação do grafo. ${resposta}`
           ])
         //alert("Classificação: \n" + e)
       })
@@ -140,7 +145,7 @@ export default function Home() {
         resp.then((e) => {
           setLogFunctions([
             ...logFunctions,
-            `Quantidade em largura ${e}`
+            `Busca em lagura: ${e}`
             ])
         })
       }
