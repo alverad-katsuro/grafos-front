@@ -13,7 +13,6 @@ export default function Home() {
   const isDigrafo = useRef(null);
   const grafoDiv = useRef(null);
   const popup = useRef(null);
-  var inDraw: boolean = false;
   const grafo: Grafo = new Grafo();
   const api = new GrafoApi();
   const [logFunctions, setLogFunctions] = useState<string[]>([]);
@@ -48,7 +47,7 @@ export default function Home() {
     if (vertices?.length == 2) {
       var [verticeA, verticeB] = vertices;
       //@ts-ignore
-      const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
         setLogFunctions([
@@ -64,7 +63,7 @@ export default function Home() {
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
-      const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
         setCookie("grafo", e, {path: "/", maxAge:3600, sameSite:true})
@@ -90,7 +89,7 @@ export default function Home() {
       var origem = prompt("Digite a origem");
       if (origem != null) {
         //@ts-ignore
-        const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+        const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
         resp.then((e) => {
           console.log("Prim: \n" + e);
           setLogFunctions([
@@ -109,7 +108,7 @@ export default function Home() {
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
-      const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
         setLogFunctions([
@@ -128,7 +127,7 @@ export default function Home() {
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
-      const resp = api.obterListaAdj(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.obterListaAdj(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
@@ -145,7 +144,7 @@ export default function Home() {
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
-      const resp = api.obterDijkstra(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.obterDijkstra(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
@@ -162,7 +161,7 @@ export default function Home() {
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
-      const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
@@ -177,7 +176,7 @@ export default function Home() {
       console.log("bug quantidadeVerticesArestas")
     }
     //@ts-ignore
-    const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+    const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
     resp.then((e) => {
       setLogFunctions([
         ...logFunctions,
@@ -195,7 +194,7 @@ export default function Home() {
       const [origem, destino] = vertices;
       if (origem != null) {
         //@ts-ignore
-        const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+        const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
         resp.then((e) => {
           setLogFunctions([
             ...logFunctions,

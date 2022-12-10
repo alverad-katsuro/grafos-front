@@ -2,6 +2,7 @@ import React, { Component, DetailedHTMLProps, useEffect } from 'react';
 import { Data, Edge, Network, Node, Options } from "vis-network";
 import { DataSet } from "vis-data";
 import { PopUp } from './PopUp';
+import { fontSize } from '@mui/system';
 
 var nodesDefault: DataSet<Node> = new DataSet<Node>({});
 nodesDefault.add([
@@ -14,14 +15,14 @@ nodesDefault.add([
 
 const edgesDefault: DataSet<Edge> = new DataSet({});
 edgesDefault.add([
-    { from: 1, to: 3, value:1.5, label:"1.5"},
-    { from: 1, to: 2, value:1.5, label:"1.5"},
-    { from: 2, to: 4, value:1.5, label:"1.5"},
-    { from: 2, to: 5, value:1.5, label:"1.5"},
-    { from: 3, to: 3, value:1.5, label:"1.5"}
+    { id: 1, from: 1, to: 3, value: 1.5, label: "1.5" },
+    { id: 2, from: 1, to: 2, value: 1.5, label: "1.5" },
+    { id: 3, from: 2, to: 4, value: 1.5, label: "1.5" },
+    { id: 4, from: 2, to: 5, value: 1.5, label: "1.5" },
+    { id: 5, from: 3, to: 3, value: 1.5, label: "1.5" }
 ]);
 
-var optionsDefault: Options = {
+const optionsDefault: Options = {
     autoResize: true,
     height: '100%',
     width: '100%',
@@ -38,9 +39,18 @@ var optionsDefault: Options = {
     edges: {
         arrows: {
             to: {
-                enabled: true
+                enabled: true,
             }
+        },
+        length: 100,
+        scaling: {
+            min: 2,
+            max: 2
+        },
+        font: {
+            size:8
         }
+
     },
     interaction: {
         multiselect: true,
@@ -50,24 +60,27 @@ var optionsDefault: Options = {
         enabled: true,
         //@ts-ignore
         addNode: function (nodeData, callback) {
-          nodeData.id = Grafo.idCount;
-          Grafo.idCount++;
-          nodeData.label = prompt("Digite um nome para o vertice");
-          callback(nodeData);
+            nodeData.id = Grafo.idCountNode;
+            Grafo.idCountNode++;
+            nodeData.label = prompt("Digite um nome para o vertice");
+            callback(nodeData);
         },
-        
+
         //@ts-ignore
         addEdge: function (edgeData, callback) {
-          edgeData.label = prompt("Digite um nome/valor para a aresta");
-          edgeData.value = Number(edgeData.label);
-          callback(edgeData);
-      },
+            edgeData.id = Grafo.idCountEdge;
+            Grafo.idCountEdge++;
+            edgeData.label = prompt("Digite um nome/valor para a aresta");
+            edgeData.value = Number(edgeData.label);
+            callback(edgeData);
+        },
     },
 }
 
 
 export class Grafo {
-    static idCount:number = 1000;
+    static idCountNode: number = 6;
+    static idCountEdge: number = 6;
     private grafo?: Network;
     private digrafo: boolean = true;
     private options: Options;
@@ -163,5 +176,13 @@ export class Grafo {
             edges: this.edges
         };
         return data;
+    }
+
+    public disableEditMode() {
+        this.grafo?.disableEditMode()
+    }
+
+    public enableEditMode() {
+        this.grafo?.enableEditMode();
     }
 }

@@ -1,9 +1,8 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useRef } from "react";
+import { Edge, Node } from "vis-network";
 import { Grafo } from "../components/BasicGraph";
-import { EdgesModel, GrafoModel } from "./api/api";
-import { NodeModel } from "./api/api";
-import { DataSet, Edge, Node } from "vis-network";
+import { GrafoModel } from "./api/api";
 import "node_modules/vis-network/dist/dist/vis-network.min.css";
 
 export default function Resposta() {
@@ -14,6 +13,8 @@ export default function Resposta() {
     let grafoModelString = getCookie("grafo")?.toString() ?? "{'bugo':true}";
     let grafoModel: GrafoModel = eval("(" + grafoModelString + ")");
 
+    console.log(grafoModel);
+
     let ed: Edge[] = grafoModel.edges?.map((e) => {
         delete e['tipoAresta'];
         return e;
@@ -22,16 +23,12 @@ export default function Resposta() {
     let nod: Node[] = grafoModel.nodes?.map((e) => {
         return e
     })
-    console.log(ed);
-    //console.log(ed);
 
     if (ed != null && nod != null) {
         grafo.Nodes.add(nod);
         grafo.Edges.add(ed);
 
     }
-    /*
-    */
 
     useEffect(() => {
         const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
