@@ -1,11 +1,12 @@
-import { IconButton } from "@material-tailwind/react";
-import { Badge } from "@mui/material";
 import MailIcon from '@mui/icons-material/Mail';
+import { Badge } from "@mui/material";
+import Link from 'next/link';
 import "node_modules/vis-network/dist/dist/vis-network.min.css";
 import { useEffect, useRef, useState } from 'react';
 import { Grafo } from '../components/BasicGraph';
 import { Terminal } from '../components/Terminal';
 import GrafoApi, { GrafoModel } from './api/api';
+import { setCookie } from 'cookies-next';
 
 export default function Home() {
   const isMatrix = useRef(null);
@@ -51,8 +52,8 @@ export default function Home() {
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
         setLogFunctions([
-        ...logFunctions,
-        `Existe um vertice entre ${verticeA} e ${verticeB} : ${e}`
+          ...logFunctions,
+          `Existe um vertice entre ${verticeA} e ${verticeB} : ${e}`
         ])
 
       })
@@ -60,25 +61,25 @@ export default function Home() {
   }
 
   function classificarAresta() {
-    if (api == null) {
-      console.log("bug classificar aresta")
-    }
     var origem = prompt("Digite a origem");
     if (origem != null) {
       //@ts-ignore
       const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
-        var resposta:string = "";
+        setCookie("grafo", e, {path: "/", maxAge:3600, sameSite:true})
+        window.open("/resposta", "_blank")
+        var resposta: string = "";
         e.edges.map((edge) => {
           resposta += `${(grafo.Nodes.get(edge.from))?.label} ${(grafo.Nodes.get(edge.to))?.label} ${edge.tipoAresta} `
         })
         setLogFunctions([
           ...logFunctions,
           `Foi gerado a classificação do grafo. ${resposta}`
-          ])
-        //alert("Classificação: \n" + e)
+        ])
+        return e;
       })
+      return resp;
     }
   }
 
@@ -95,7 +96,7 @@ export default function Home() {
           setLogFunctions([
             ...logFunctions,
             `Prim a partide do v: ${origem} é ${e}`
-            ])
+          ])
         })
       }
     }
@@ -114,7 +115,7 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `O grau de ${origem} é ${e}`
-          ])
+        ])
         //alert("Classificação: \n" + e)
       })
     }
@@ -132,7 +133,7 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `Lista de adj de ${origem} ${e}`
-          ])
+        ])
       })
     }
   }
@@ -149,7 +150,24 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `Caminho a partir de v ${origem} ${e}`
-          ])
+        ])
+      })
+    }
+  }
+
+  function obterOrdenacaoTopologica() {
+    if (api == null) {
+      console.log("bug obterOrdenacaoTopologica")
+    }
+    var origem = prompt("Digite a origem");
+    if (origem != null) {
+      //@ts-ignore
+      const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked);
+      resp.then((e) => {
+        setLogFunctions([
+          ...logFunctions,
+          `Ordenação topologica do vertice ${origem} -> ${e}`
+        ])
       })
     }
   }
@@ -164,7 +182,7 @@ export default function Home() {
       setLogFunctions([
         ...logFunctions,
         `Quantidade de Vertices ${e.quantidadeVertice} Quantidade de Aresta ${e.quantidadeAresta}`
-        ])
+      ])
     })
   }
 
@@ -182,7 +200,7 @@ export default function Home() {
           setLogFunctions([
             ...logFunctions,
             `Busca em lagura: ${e}`
-            ])
+          ])
         })
       }
     }
@@ -191,7 +209,7 @@ export default function Home() {
   return (
     <>
       <div className='xl:h-screen bg-gradient-to-tl from-green-900 via-slate-700 to-pink-800'>
-        <div className="flex overflow-hidde xl:max-h-screen">
+        <div className="flex overflow-hidden xl:max-h-screen">
           <div ref={popup} hidden={true} className="bg-gray-900 bg-opacity-50 fixed inset-0 z-10" id="sidebarBackdrop">
 
             {/* AQUI VAI O POPUP */}
@@ -199,15 +217,14 @@ export default function Home() {
             <Terminal lines={logFunctions} onClose={changeStatePop}></Terminal>
 
           </div>
-          <div id="main-content" className="h-screen w-full relative overflow-y-auto ">
+          <div id="main-content" className="h-screen w-full relative overflow-y-auto">
             <main>
               <div className="pt-6 px-4">
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-1">
-                    <div id="main-chart" className="h-full w-full flex">
-                      <div ref={grafoDiv} className="w-full" id="graphId">
+                    <div className="h-full w-full flex">
+                      <div className="h-full" ref={grafoDiv} id="graphId"></div>
 
-                      </div>
                     </div>
                   </div>
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
@@ -322,7 +339,7 @@ export default function Home() {
                                 <tr className="bg-gray-50">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
                                     <button onClick={buscaLargura} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Busca em Larguara.
+                                      Busca em Largura.
                                     </button>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
@@ -347,6 +364,16 @@ export default function Home() {
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
                                     Retorna um grafo com os pesos relaxados.
+                                  </td>
+                                </tr>
+                                <tr className="bg-gray-50">
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
+                                    <button onClick={obterOrdenacaoTopologica} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                      Ordenação Topologica.
+                                    </button>
+                                  </td>
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                    Retorna a ordenação topologica.
                                   </td>
                                 </tr>
                               </tbody>

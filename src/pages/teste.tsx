@@ -20,10 +20,8 @@ export default function FormDialog() {
     setOpen(false);
   };
 
-  const teste:string[] = ["1","2","3"];
+  const teste: string[] = ["1", "2", "3"];
   return (
-    <div>
-      <Terminal resultados = {teste}></Terminal>
-    </div>
+    <></>
   );
 }
