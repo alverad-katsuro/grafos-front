@@ -12,7 +12,6 @@ import ItemListaCheckBox from '../components/ItemListaCheckBox';
 import { Textarea } from '@material-tailwind/react';
 
 export default function Home() {
-  //const isDigrafo = useRef(null);
   const grafoDiv = useRef(null);
   const grafo: Grafo = new Grafo();
   const api = new GrafoApi();
@@ -26,8 +25,6 @@ export default function Home() {
 
   function changeDigrafo() {
     setIsDigrafo(!isDigrafo);
-    console.log(grafoDiv.current);
-    grafo.createGrafo();
   }
 
   function changeMatrix() {
@@ -43,7 +40,7 @@ export default function Home() {
     //grafo.Container = container;
     grafo.Container = grafoDiv.current;
     grafo.createGrafo();
-  }, [])
+  })
 
   function criaGrafoDoForm() {
     console.log(formularioCriaGrafo);
