@@ -25,12 +25,12 @@ export function Terminal(props: TerminalProps) {
 
                     </div>
                     <div className="pl-1 pt-1 h-auto  text-green-200 font-mono text-xs bg-black" id="console">
-                        <div className="pl-1 pt-1 h-auto  text-green-200 font-mono text-xs bg-black" id="console">
-                            <p className="pb-1">Last login: Wed Sep 25 09:11:04 on ttys002</p>
+                        <div className="pl-1 pt-1 h-auto  text-green-200 font-mono text-xs bg-black overflow-y-auto max-h-64" id="console">
+                            <p className="text-sm">Last login: Wed Sep 25 09:11:04 on ttys002</p>
                             {
                                 props.lines.map((resultado) => {
                                     return (
-                                        <p>{resultado}</p>
+                                        <p className="text-sm">alverad@alverad-tuf:~$ {resultado}</p>
                                     );
                                 })}
                         </div>

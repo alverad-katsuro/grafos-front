@@ -48,7 +48,7 @@ const optionsDefault: Options = {
             max: 2
         },
         font: {
-            size:8
+            size: 8
         }
 
     },
@@ -128,14 +128,23 @@ export class Grafo {
     }
 
     public set Digrafo(isDigrafo: boolean) {
-        this.digrafo = !this.digrafo;
+        this.digrafo = isDigrafo;
         this.options.edges = (
             {
                 arrows: {
                     to: {
-                        enabled: isDigrafo
+                        enabled: isDigrafo,
                     }
+                },
+                length: 100,
+                scaling: {
+                    min: 2,
+                    max: 2
+                },
+                font: {
+                    size: 8
                 }
+
             })
         this.grafo?.setOptions(this.options);
     }

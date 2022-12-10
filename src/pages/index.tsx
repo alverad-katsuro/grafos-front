@@ -7,30 +7,31 @@ import { Grafo } from '../components/BasicGraph';
 import { Terminal } from '../components/Terminal';
 import GrafoApi, { GrafoModel } from './api/api';
 import { setCookie } from 'cookies-next';
+import ItemListaButton from '../components/ItemListaButton';
+import ItemListaCheckBox from '../components/ItemListaCheckBox';
 
 export default function Home() {
-  const isMatrix = useRef(null);
-  const isDigrafo = useRef(null);
+  //const isDigrafo = useRef(null);
   const grafoDiv = useRef(null);
   const popup = useRef(null);
   const grafo: Grafo = new Grafo();
   const api = new GrafoApi();
+  const [isDigrafo, setIsDigrafo] = useState<boolean>(true);
+  const [isMatrix, setIsMatrix] = useState<boolean>(true);
+  const [isPopup, setPopup] = useState<boolean>(true);
+  grafo.Digrafo = isDigrafo;
   const [logFunctions, setLogFunctions] = useState<string[]>([]);
 
   function changeDigrafo() {
-    //@ts-ignore
-    if (isDigrafo.current.checked) {
-      grafo.Digrafo = true;
-    } else {
-      grafo.Digrafo = false;
-    }
+    setIsDigrafo(!isDigrafo);
+  }
+
+  function changeMatrix() {
+    setIsMatrix(!isMatrix);
   }
 
   function changeStatePop() {
-    if (popup.current != null) {
-      //@ts-ignore
-      popup.current.hidden = !popup.current.hidden;
-    }
+    setPopup(!isPopup);
   }
 
   useEffect(() => {
@@ -46,8 +47,7 @@ export default function Home() {
     var vertices = prompt("Digite os vertices")?.split(" ");
     if (vertices?.length == 2) {
       var [verticeA, verticeB] = vertices;
-      //@ts-ignore
-      const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
         setLogFunctions([
@@ -60,13 +60,12 @@ export default function Home() {
   }
 
   function classificarAresta() {
-    var origem = prompt("Digite a origem");
+    var origem = prompt("Digite a origem")?.split(" ")[0];
     if (origem != null) {
-      //@ts-ignore
-      const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
-        setCookie("grafo", e, {path: "/", maxAge:3600, sameSite:true})
+        setCookie("grafo", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
         var resposta: string = "";
         e.edges.map((edge) => {
@@ -82,14 +81,13 @@ export default function Home() {
     }
   }
 
-  function prim() {
+  function prim() { // fazer grafo em new aba | refatorar backend to return GRAFOMODEL
     if (api == null) {
       console.log("bug prim");
     } else {
-      var origem = prompt("Digite a origem");
+      var origem = prompt("Digite a origem")?.split(" ")[0];
       if (origem != null) {
-        //@ts-ignore
-        const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+        const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
         resp.then((e) => {
           console.log("Prim: \n" + e);
           setLogFunctions([
@@ -105,10 +103,9 @@ export default function Home() {
     if (api == null) {
       console.log("bug classificar aresta")
     }
-    var origem = prompt("Digite a origem");
+    var origem = prompt("Digite a origem")?.split(" ")[0];
     if (origem != null) {
-      //@ts-ignore
-      const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
         setLogFunctions([
@@ -120,31 +117,29 @@ export default function Home() {
     }
   }
 
-  function obterListaAdj() {
+  function obterListaAdj() { 
     if (api == null) {
       console.log("bug obterListaAdj")
     }
-    var origem = prompt("Digite a origem");
+    var origem = prompt("Digite a origem")?.split(" ")[0];
     if (origem != null) {
-      //@ts-ignore
-      const resp = api.obterListaAdj(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.obterListaAdj(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
-          `Lista de adj de ${origem} ${e}`
+          `Lista de adj de ${origem} \{${e}\}`
         ])
       })
     }
   }
 
-  function obterDijkstra() {
+  function obterDijkstra() {// fazer grafo em new aba | refatorar backend to return GRAFOMODEL
     if (api == null) {
       console.log("bug obterDijkstra")
     }
-    var origem = prompt("Digite a origem");
+    var origem = prompt("Digite a origem")?.split(" ")[0];
     if (origem != null) {
-      //@ts-ignore
-      const resp = api.obterDijkstra(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.obterDijkstra(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
@@ -154,14 +149,29 @@ export default function Home() {
     }
   }
 
+  function verificarCiclo() {
+    if (api == null) {
+      console.log("bug verificarCiclo")
+    }
+    var origem = prompt("Digite a origem")?.split(" ")[0];
+    if (origem != null) {
+      const resp = api.verificarCiclo(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
+      resp.then((e) => {
+        setLogFunctions([
+          ...logFunctions,
+          `Há ciclo? v ${origem} ${e}`
+        ])
+      })
+    }
+  }
+
   function obterOrdenacaoTopologica() {
     if (api == null) {
       console.log("bug obterOrdenacaoTopologica")
     }
-    var origem = prompt("Digite a origem");
+    var origem = prompt("Digite a origem")?.split(" ")[0];
     if (origem != null) {
-      //@ts-ignore
-      const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+      const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
@@ -175,8 +185,7 @@ export default function Home() {
     if (api == null) {
       console.log("bug quantidadeVerticesArestas")
     }
-    //@ts-ignore
-    const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+    const resp = api.quantidadeVerticesArestas(grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
     resp.then((e) => {
       setLogFunctions([
         ...logFunctions,
@@ -193,8 +202,7 @@ export default function Home() {
     if (vertices?.length == 2) {
       const [origem, destino] = vertices;
       if (origem != null) {
-        //@ts-ignore
-        const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix.current.checked, isDigrafo.current.checked);
+        const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
         resp.then((e) => {
           setLogFunctions([
             ...logFunctions,
@@ -209,12 +217,8 @@ export default function Home() {
     <>
       <div className='xl:h-screen bg-gradient-to-tl from-green-900 via-slate-700 to-pink-800'>
         <div className="flex overflow-hidden xl:max-h-screen">
-          <div ref={popup} hidden={true} className="bg-gray-900 bg-opacity-50 fixed inset-0 z-10" id="sidebarBackdrop">
-
-            {/* AQUI VAI O POPUP */}
-
+          <div hidden={isPopup} className="bg-gray-900 bg-opacity-50 fixed inset-0 z-10" id="sidebarBackdrop">
             <Terminal lines={logFunctions} onClose={changeStatePop}></Terminal>
-
           </div>
           <div id="main-content" className="h-screen w-full relative overflow-y-auto">
             <main>
@@ -232,7 +236,7 @@ export default function Home() {
                         <h3 className="text-xl font-bold text-gray-900 mb-2">Funções disponiveis</h3>
                       </div>
                       <div>
-                        <button onClick={changeStatePop}>
+                        <button onClick={() => { setPopup(!isPopup) }}>
                           <Badge badgeContent={logFunctions.length} color="primary">
                             <MailIcon color="action" />
                           </Badge>
@@ -255,126 +259,18 @@ export default function Home() {
                                 </tr>
                               </thead>
                               <tbody className="bg-white">
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <div className="form-check">
-                                      <input ref={isMatrix} defaultChecked={true} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isMatrix" />
-                                    </div>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    True -&gt; Matriz | False -&gt; Lista
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <div className="form-check">
-                                      <input ref={isDigrafo} defaultChecked={true} onClick={changeDigrafo} className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" id="isDigrafo" />
-                                    </div>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    True -&gt; Digrafo | False -&gt; Não digrafo
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={verificarAresta} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
-                                      Verificar Aresta
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Verifica se existe uma determinada aresta.
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={obterListaAdj} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Lista de Adjacencia
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna uma lista de adjacencia a partir do grafo inserido.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={quantidadeVerticesArestas} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Contador
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna a contagem de vertices e arestas.
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={obterGrauVertice} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Verifica Grau
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna o grau de um vertice.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Busca em Profundidade.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Realiza a busca em profundidade.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={classificarAresta} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Classificação de arestas.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Realiza a classificação de arestas
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={buscaLargura} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Busca em Largura.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Realiza a busca em largura no grafo dado.
-                                  </td>
-                                </tr>
-                                <tr>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
-                                    <button onClick={prim} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      AGM.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna a arvore geradora minima segundo Prim.
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={obterDijkstra} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Dijkstra.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna um grafo com os pesos relaxados.
-                                  </td>
-                                </tr>
-                                <tr className="bg-gray-50">
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900 rounded-lg rounded-left">
-                                    <button onClick={obterOrdenacaoTopologica} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                      Ordenação Topologica.
-                                    </button>
-                                  </td>
-                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    Retorna a ordenação topologica.
-                                  </td>
-                                </tr>
+                                <ItemListaCheckBox onChange={changeMatrix} schemaColor={false} defaultCheck={true} check={isMatrix} describe='True -&gt; Matriz | False -&gt; Lista' ></ItemListaCheckBox>
+                                <ItemListaCheckBox onChange={changeDigrafo} schemaColor={true} defaultCheck={true} check={isDigrafo} describe='True -&gt; Digrafo | False -&gt; Não digrafo' ></ItemListaCheckBox>
+                                <ItemListaButton onClick={verificarAresta} schemaColor={false} buttonName={"Verificar Aresta"} describe={"Verifica se existe uma determinada aresta."} ></ItemListaButton>
+                                <ItemListaButton onClick={obterListaAdj} schemaColor={true} buttonName={"Lista de Adjacencia"} describe={"Retorna uma lista de adjacencia a partir do grafo inserido."} ></ItemListaButton>
+                                <ItemListaButton onClick={quantidadeVerticesArestas} schemaColor={false} buttonName={"Contador"} describe={"Retorna a contagem de vertices e arestas."} ></ItemListaButton>
+                                <ItemListaButton onClick={obterGrauVertice} schemaColor={true} buttonName={"Verifica Grau."} describe={"Retorna o grau de um vertice."} ></ItemListaButton>
+                                <ItemListaButton onClick={classificarAresta} schemaColor={false} buttonName={"Classificação de arestas."} describe={"Realiza a classificação de arestas."} ></ItemListaButton>
+                                <ItemListaButton onClick={buscaLargura} schemaColor={true} buttonName={"Busca em Largura."} describe={"Realiza a busca em largura no grafo dado."} ></ItemListaButton>
+                                <ItemListaButton onClick={prim} schemaColor={false} buttonName={"Prim."} describe={"Retorna a arvore geradora minima segundo Prim."} ></ItemListaButton>
+                                <ItemListaButton onClick={obterDijkstra} schemaColor={true} buttonName={"Dijkstra."} describe={"Retorna um grafo com os pesos relaxados."} ></ItemListaButton>
+                                <ItemListaButton onClick={verificarCiclo} schemaColor={false} buttonName={"Ciclo."} describe={"Verifica se há ciclo no grafo."} ></ItemListaButton>
+                                <ItemListaButton onClick={obterOrdenacaoTopologica} schemaColor={true} buttonName={"Ordenação Topologica."} describe={"Retorna a ordenação topologica."} ></ItemListaButton>
                               </tbody>
                             </table>
                           </div>

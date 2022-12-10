@@ -20,7 +20,7 @@ export type EdgesModel = {
 }
 
 export type GrafoModel = {
-	origem: string,
+	origem: string | null,
 	destino: string | null,
 	quantidadeAresta: number | null,
 	quantidadeVertice: number | null,
@@ -35,12 +35,26 @@ export default class GrafoApi {
 		this.api = axios.create({ baseURL: url ?? "http://localhost:8080/" })
 	}
 
-	async verificarAresta(verticeA: string, verticeB: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<boolean> {
+	async verificarAresta(verticeA: string, verticeB: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<boolean> {
 		var grafo = {
 			origem: verticeA,
 			destino: verticeB,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<boolean>("/matriz/verificarAresta/", grafo)).data;
@@ -51,11 +65,25 @@ export default class GrafoApi {
 		}
 	}
 
-	async obterListaAdj(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<string[]> {
+	async obterListaAdj(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<string[]>("/matriz/obterListaAdj/", grafo)).data;
@@ -66,11 +94,25 @@ export default class GrafoApi {
 		}
 	}
 
-	async classificarAresta(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<GrafoModel> {
+	async classificarAresta(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<GrafoModel>("/matriz/obterClassificacaoAresta/", grafo)).data;
@@ -82,14 +124,13 @@ export default class GrafoApi {
 	}
 
 
-	async quantidadeVerticesArestas(Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<GrafoModel> {
+	async quantidadeVerticesArestas(Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			nodes: Nodes.get(),
 			edges: Edges.get()
 		}
-
 		if (!digrafo) {
-			grafo.edges.map((ed)=>{
+			grafo.edges.map((ed) => {
 				if (ed.to != ed.from) {
 					grafo.edges.push({
 						id: Grafo.idCountEdge,
@@ -98,7 +139,7 @@ export default class GrafoApi {
 						value: ed.value,
 						label: ed.label
 					})
-					Grafo.idCountEdge++;	
+					Grafo.idCountEdge++;
 				}
 			})
 		}
@@ -111,12 +152,26 @@ export default class GrafoApi {
 		}
 	}
 
-	async buscaLargura(verticeA: string, verticeB: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<string[]> {
+	async buscaLargura(verticeA: string, verticeB: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {
 			origem: verticeA,
 			destino: verticeB,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<string[]>("/matriz/buscaLargura/", grafo)).data;
@@ -128,11 +183,25 @@ export default class GrafoApi {
 	}
 
 
-	async obterGrauVertice(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<number> {
+	async obterGrauVertice(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<number> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<number>("/matriz/obterGrauVertice/", grafo)).data;
@@ -144,11 +213,25 @@ export default class GrafoApi {
 	}
 
 
-	async verificarCiclo(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<boolean> {
+	async verificarCiclo(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<boolean> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<boolean>("/matriz/verificarCiclo/", grafo)).data;
@@ -160,11 +243,25 @@ export default class GrafoApi {
 	}
 
 
-	async prim(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<string[]> {
+	async prim(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<string[]>("/matriz/prim/", grafo)).data;
@@ -176,11 +273,25 @@ export default class GrafoApi {
 	}
 
 
-	async obterDijkstra(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<string[]> {
+	async obterDijkstra(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<string[]>("/matriz/dijkstra/", grafo)).data;
@@ -192,11 +303,25 @@ export default class GrafoApi {
 	}
 
 
-	async obterOrdenacaoTopologica(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo:boolean): Promise<string[]> {
+	async obterOrdenacaoTopologica(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
 			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
 		}
 		if (matriz) {
 			const resp = (await this.api.post<string[]>("/matriz/ordenacaoTopologica/", grafo)).data;
@@ -206,6 +331,4 @@ export default class GrafoApi {
 			return resp;
 		}
 	}
-
-
 }
