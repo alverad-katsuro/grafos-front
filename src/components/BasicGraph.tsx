@@ -14,7 +14,7 @@ nodesDefault.add([
 ]);
 
 const edgesDefault: DataSet<Edge> = new DataSet({});
-edgesDefault.add([
+edgesDefault.add([  
     { id: 1, from: 1, to: 3, value: 1.5, label: "1.5" },
     { id: 2, from: 1, to: 2, value: 1.5, label: "1.5" },
     { id: 3, from: 2, to: 4, value: 1.5, label: "1.5" },
@@ -86,7 +86,7 @@ export class Grafo {
     private options: Options;
     private nodes: DataSet<Node>;
     private edges: DataSet<Edge>;
-    private container?: HTMLElement;
+    private container?: HTMLElement | null;
 
     constructor(nodes?: DataSet<Node>, edges?: DataSet<Edge>, options?: Options) {
         this.options = options ?? optionsDefault;
@@ -168,12 +168,12 @@ export class Grafo {
     }
 
 
-    public set Container(container: HTMLElement | undefined) {
+    public set Container(container: HTMLElement | undefined | null) {
         this.container = container;
     }
 
 
-    public get Container(): HTMLElement | undefined {
+    public get Container(): HTMLElement | undefined | null {
         return this.container;
     }
 

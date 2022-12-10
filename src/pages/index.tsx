@@ -9,11 +9,11 @@ import GrafoApi, { GrafoModel } from './api/api';
 import { setCookie } from 'cookies-next';
 import ItemListaButton from '../components/ItemListaButton';
 import ItemListaCheckBox from '../components/ItemListaCheckBox';
+import { Textarea } from '@material-tailwind/react';
 
 export default function Home() {
   //const isDigrafo = useRef(null);
   const grafoDiv = useRef(null);
-  const popup = useRef(null);
   const grafo: Grafo = new Grafo();
   const api = new GrafoApi();
   const [isDigrafo, setIsDigrafo] = useState<boolean>(true);
@@ -21,9 +21,13 @@ export default function Home() {
   const [isPopup, setPopup] = useState<boolean>(true);
   grafo.Digrafo = isDigrafo;
   const [logFunctions, setLogFunctions] = useState<string[]>([]);
+  const [formularioCriaGrafo, setformularioCriaGrafo] = useState<string>("");
+  grafo.Container = grafoDiv.current;
 
   function changeDigrafo() {
     setIsDigrafo(!isDigrafo);
+    console.log(grafoDiv.current);
+    grafo.createGrafo();
   }
 
   function changeMatrix() {
@@ -35,10 +39,15 @@ export default function Home() {
   }
 
   useEffect(() => {
-    const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
-    grafo.Container = container;
+    //const container: HTMLElement = document.getElementById("graphId") as HTMLElement;
+    //grafo.Container = container;
+    grafo.Container = grafoDiv.current;
     grafo.createGrafo();
-  })
+  }, [])
+
+  function criaGrafoDoForm() {
+    console.log(formularioCriaGrafo);
+  }
 
   function verificarAresta() {
     if (api == null) {
@@ -65,7 +74,7 @@ export default function Home() {
       const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
-        setCookie("grafo", e, { path: "/", maxAge: 3600, sameSite: true })
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
         var resposta: string = "";
         e.edges.map((edge) => {
@@ -117,7 +126,7 @@ export default function Home() {
     }
   }
 
-  function obterListaAdj() { 
+  function obterListaAdj() {
     if (api == null) {
       console.log("bug obterListaAdj")
     }
@@ -149,6 +158,25 @@ export default function Home() {
     }
   }
 
+  function obterDijkstraPesosAtt() {// fazer grafo em new aba | refatorar backend to return GRAFOMODEL
+    if (api == null) {
+      console.log("bug obterDijkstraPesosAtt")
+    }
+    var origem = prompt("Digite a origem")?.split(" ")[0];
+    if (origem != null) {
+      const resp = api.obterDijkstraPesosAtt(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
+      resp.then((e) => {
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
+        window.open("/resposta", "_blank")
+        setLogFunctions([
+          ...logFunctions,
+          `Caminho a partir de v ${origem} foi calculado e aberto em nova pagina a resposta.`
+        ])
+        console.log(e);
+      })
+    }
+  }
+
   function verificarCiclo() {
     if (api == null) {
       console.log("bug verificarCiclo")
@@ -160,6 +188,24 @@ export default function Home() {
         setLogFunctions([
           ...logFunctions,
           `Há ciclo? v ${origem} ${e}`
+        ])
+      })
+    }
+  }
+
+  function obterFortementeConexo() {
+    if (api == null) {
+      console.log("bug verificarCiclo")
+    }
+    var origem = prompt("Digite a origem")?.split(" ")[0];
+    if (origem != null) {
+      const resp = api.obterFortementeConexo(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
+      resp.then((e) => {
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
+        window.open("/resposta", "_blank")
+        setLogFunctions([
+          ...logFunctions,
+          `Foi calculado os fortmentes conexos? origem: ${origem}`
         ])
       })
     }
@@ -271,6 +317,17 @@ export default function Home() {
                                 <ItemListaButton onClick={obterDijkstra} schemaColor={true} buttonName={"Dijkstra."} describe={"Retorna um grafo com os pesos relaxados."} ></ItemListaButton>
                                 <ItemListaButton onClick={verificarCiclo} schemaColor={false} buttonName={"Ciclo."} describe={"Verifica se há ciclo no grafo."} ></ItemListaButton>
                                 <ItemListaButton onClick={obterOrdenacaoTopologica} schemaColor={true} buttonName={"Ordenação Topologica."} describe={"Retorna a ordenação topologica."} ></ItemListaButton>
+                                <ItemListaButton onClick={obterFortementeConexo} schemaColor={false} buttonName={"Fortemente Conexo."} describe={"Retorna os grupos conexos."} ></ItemListaButton>
+                                <tr className="bg-gray-50">
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
+                                    <button onClick={criaGrafoDoForm} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
+                                      Cria um grafo.
+                                    </button>
+                                  </td>
+                                  <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
+                                    <Textarea value={formularioCriaGrafo} onChange={e=>setformularioCriaGrafo(e.target.value)}></Textarea>
+                                  </td>
+                                </tr>
                               </tbody>
                             </table>
                           </div>

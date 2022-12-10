@@ -6,7 +6,8 @@ import { Grafo } from "../../components/BasicGraph";
 
 export type NodeModel = {
 	id: number,
-	label: string
+	label: string,
+	color: string
 }
 
 export type EdgesModel = {
@@ -302,6 +303,65 @@ export default class GrafoApi {
 		}
 	}
 
+
+	async obterDijkstraPesosAtt(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+		var grafo = {
+			origem: verticeA,
+			nodes: Nodes.get(),
+			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
+		}
+		if (matriz) {
+			const resp = (await this.api.post<string[]>("/matriz/dijkstraPesosAtt/", grafo)).data;
+			return resp;
+		} else {
+			const resp = (await this.api.post<string[]>("/listaAdjacencia/dijkstraPesosAtt/", grafo)).data;
+			return resp;
+		}
+	}
+
+
+	async obterFortementeConexo(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+		var grafo = {
+			origem: verticeA,
+			nodes: Nodes.get(),
+			edges: Edges.get()
+		}
+		if (!digrafo) {
+			grafo.edges.map((ed) => {
+				if (ed.to != ed.from) {
+					grafo.edges.push({
+						id: Grafo.idCountEdge,
+						from: ed.to,
+						to: ed.from,
+						value: ed.value,
+						label: ed.label
+					})
+					Grafo.idCountEdge++;
+				}
+			})
+		}
+		if (matriz) {
+			const resp = (await this.api.post<string[]>("/matriz/fortementeConexo/", grafo)).data;
+			return resp;
+		} else {
+			const resp = (await this.api.post<string[]>("/listaAdjacencia/fortementeConexo/", grafo)).data;
+			return resp;
+		}
+	}
 
 	async obterOrdenacaoTopologica(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
 		var grafo = {

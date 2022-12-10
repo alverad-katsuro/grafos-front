@@ -10,7 +10,7 @@ export default function Resposta() {
     var grafo: Grafo = new Grafo();
     grafo.Nodes.clear();
     grafo.Edges.clear();
-    let grafoModelString = getCookie("grafo")?.toString() ?? "{'bugo':true}";
+    let grafoModelString = getCookie("grafoResposta")?.toString() ?? "{'bugo':true}";
     let grafoModel: GrafoModel = eval("(" + grafoModelString + ")");
 
     console.log(grafoModel);
