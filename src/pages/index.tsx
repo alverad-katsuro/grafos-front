@@ -222,7 +222,7 @@ export default function Home() {
                 <div className="w-full grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-2 gap-4">
                   <div className="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8  2xl:col-span-1">
                     <div className="h-full w-full flex">
-                      <div className="h-full" ref={grafoDiv} id="graphId"></div>
+                      <div className="h-full w-full" ref={grafoDiv} id="graphId"></div>
 
                     </div>
                   </div>
