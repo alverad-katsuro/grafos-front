@@ -44,6 +44,9 @@ export default function Home() {
 
   function criaGrafoDoForm() {
     console.log(formularioCriaGrafo);
+    clear()
+    formularioCriaGrafo.split("\n")
+    //grafo.Edges.add({id:}) fzr algo tem grafo.addEdge() e grafo.addNode()
   }
   
   function clear() {

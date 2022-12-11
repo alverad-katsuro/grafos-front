@@ -102,6 +102,13 @@ export class Grafo {
         this.grafo?.deleteSelected()
     }
 
+    public addEdge(from:number, to:number, label:string){
+        this.edges.add({from:from, to:to, label:label, value:Number(label)})
+    }
+
+    public addNode(id:number, label:string){
+        this.nodes.add({id:id, label:label})
+    }
 
     public get Edges(): DataSet<Edge> {
         return this.edges;
@@ -121,7 +128,6 @@ export class Grafo {
     public set Grafo(grafo: Network | undefined) {
         this.grafo = grafo;
     }
-
 
     public get Digrafo(): boolean {
         return this.digrafo;
