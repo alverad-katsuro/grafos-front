@@ -5,6 +5,8 @@ import { PopUp } from './PopUp';
 import { fontSize } from '@mui/system';
 
 var nodesDefault: DataSet<Node> = new DataSet<Node>({});
+var edgesDefault: DataSet<Edge> = new DataSet({});
+/*
 nodesDefault.add([
     { id: 0, label: "0" },
     { id: 1, label: "1" },
@@ -27,7 +29,6 @@ edgesDefault.add([
     { id: 8, from: 5, to: 4, value: 1, label: "1" },
     { id: 9, from: 5, to: 5, value: 1, label: "1" }
 ]);
-/*
 
 const edgesDefault: DataSet<Edge> = new DataSet({});
 edgesDefault.add([  
@@ -61,6 +62,7 @@ edgesDefault.add([
     { id: 5, from: 3, to: 2, value: 2, label: "2" },
     { id: 6, from: 3, to: 4, value: 6, label: "6" },
 ]);
+*/
 
 nodesDefault.add([
     { id: 0, label: "0" },
@@ -75,7 +77,6 @@ nodesDefault.add([
     { id: 9, label: "9" }
 ]);
 
-const edgesDefault: DataSet<Edge> = new DataSet({});
 edgesDefault.add([  
     { id: 0, from: 0, to: 1, value: 1, label: "1" },
     { id: 1, from: 0, to: 2, value: 1, label: "1" },
@@ -93,7 +94,6 @@ edgesDefault.add([
     { id: 13, from: 9, to: 6, value: 1, label: "1" },
     
 ]);
-*/
 
 const optionsDefault: Options = {
     autoResize: true,
