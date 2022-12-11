@@ -235,6 +235,11 @@ export class Grafo {
         this.grafo?.setOptions(this.options);
     }
 
+    public set Fisica(isFisica: boolean) {
+        this.options.physics = isFisica;
+        this.grafo?.setOptions(this.options);
+    }
+
     public get Options(): Options {
         return this.options
     }

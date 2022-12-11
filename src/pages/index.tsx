@@ -101,6 +101,7 @@ export default function Home() {
       const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
+        e.fisica = true;
         removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
         setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
@@ -129,6 +130,7 @@ export default function Home() {
         const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
         resp.then((e) => {
           console.log("Prim: \n" + e);
+          e.fisica = true;
           removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
           setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
           window.open("/resposta", "_blank")
@@ -206,9 +208,10 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterDijkstraPesosAtt(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
+        e.fisica = true;
         removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
-        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
-        window.open("/resposta", "_blank")
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true });
+        window.open("/resposta", "_blank");
         setLogFunctions([
           ...logFunctions,
           `Caminho a partir de v ${origem} foi calculado e aberto em nova pagina a resposta.`
@@ -247,8 +250,8 @@ export default function Home() {
       const resp = api.obterFortementeConexo(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
-        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
-        window.open("/resposta", "_blank")
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true });
+        window.open("/resposta", "_blank");
         setLogFunctions([
           ...logFunctions,
           `Foi calculado os fortmentes conexos? origem: ${origem}`
@@ -267,9 +270,16 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
-        //removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
-        //setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
-        //window.open("/resposta", "_blank")
+        removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
+        var distanciaX:number = 0;
+        e.fisica = false;
+        e.nodes.map((e) => {
+          e.y = 0;
+          e.x = distanciaX;
+          distanciaX += 100;
+        });
+        setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
+        window.open("/resposta", "_blank")
         setLogFunctions([
           ...logFunctions,
           `Ordenação topologica do vertice ${origem} -> ${e.nodes.map((e) => { return e.label })}`

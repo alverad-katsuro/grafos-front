@@ -7,7 +7,9 @@ import { Grafo } from "../../components/BasicGraph";
 export type NodeModel = {
 	id: number,
 	label: string,
-	color: string
+	color: string,
+	x?: number,
+	y?: number
 }
 
 export type EdgesModel = {
@@ -27,7 +29,8 @@ export type GrafoModel = {
 	quantidadeVertice: number | null,
 	digrafo: boolean | null,
 	nodes: NodeModel[],
-	edges: EdgesModel[]
+	edges: EdgesModel[],
+	fisica?: boolean
 }
 
 export default class GrafoApi {
@@ -253,7 +256,7 @@ export default class GrafoApi {
 	}
 
 
-	async prim(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+	async prim(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
@@ -275,10 +278,10 @@ export default class GrafoApi {
 			})
 		}
 		if (matriz) {
-			const resp = (await this.api.post<string[]>("/matriz/prim/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/matriz/prim/", grafo)).data;
 			return resp;
 		} else {
-			const resp = (await this.api.post<string[]>("/listaAdjacencia/prim/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/listaAdjacencia/prim/", grafo)).data;
 			return resp;
 		}
 	}
@@ -315,7 +318,7 @@ export default class GrafoApi {
 	}
 
 
-	async obterDijkstraPesosAtt(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+	async obterDijkstraPesosAtt(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
@@ -337,10 +340,10 @@ export default class GrafoApi {
 			})
 		}
 		if (matriz) {
-			const resp = (await this.api.post<string[]>("/matriz/dijkstraPesosAtt/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/matriz/dijkstraPesosAtt/", grafo)).data;
 			return resp;
 		} else {
-			const resp = (await this.api.post<string[]>("/listaAdjacencia/dijkstraPesosAtt/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/listaAdjacencia/dijkstraPesosAtt/", grafo)).data;
 			return resp;
 		}
 	}

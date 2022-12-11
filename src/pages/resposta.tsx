@@ -14,20 +14,25 @@ export default function Resposta() {
     let grafoModel: GrafoModel = eval("(" + grafoModelString + ")");
 
     console.log(grafoModel);
-
     let ed: Edge[] = grafoModel.edges?.map((e) => {
         delete e['tipoAresta'];
         return e;
     });
-
+    
     let nod: Node[] = grafoModel.nodes?.map((e) => {
         return e
     })
-
+    
     if (ed != null && nod != null) {
         grafo.Nodes.add(nod);
         grafo.Edges.add(ed);
         grafo.Digrafo = grafoModel.digrafo!;
+        if (grafoModel.fisica != undefined) {
+            grafo.Fisica = grafoModel.fisica;
+            console.log("ENHTROOROROT???    ");
+        }
+        console.log("Tem fisica???    " + grafoModel.fisica);
+        
     }
 
     useEffect(() => {
