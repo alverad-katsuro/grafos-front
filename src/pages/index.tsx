@@ -45,6 +45,14 @@ export default function Home() {
   function criaGrafoDoForm() {
     console.log(formularioCriaGrafo);
   }
+  
+  function clear() {
+    grafo.Nodes.clear();
+    grafo.Edges.clear();
+    Grafo.idCountEdge = 0;
+    Grafo.idCountNode = 0;
+    setLogFunctions([])
+  }
 
   function verificarAresta() {
     if (api == null) {
@@ -304,7 +312,7 @@ export default function Home() {
                               <tbody className="bg-white">
                                 <ItemListaCheckBox onChange={changeMatrix} schemaColor={false} defaultCheck={true} check={isMatrix} describe='True -&gt; Matriz | False -&gt; Lista' ></ItemListaCheckBox>
                                 <ItemListaCheckBox onChange={changeDigrafo} schemaColor={true} defaultCheck={true} check={isDigrafo} describe='True -&gt; Digrafo | False -&gt; Não digrafo' ></ItemListaCheckBox>
-                                <ItemListaButton onClick={verificarAresta} schemaColor={false} buttonName={"Verificar Aresta"} describe={"Verifica se existe uma determinada aresta."} ></ItemListaButton>
+                                <ItemListaButton onClick={clear} schemaColor={false} buttonName={"Limpa o grafo."} describe={"Limpa o Grafo."} ></ItemListaButton>
                                 <ItemListaButton onClick={obterListaAdj} schemaColor={true} buttonName={"Lista de Adjacencia"} describe={"Retorna uma lista de adjacencia a partir do grafo inserido."} ></ItemListaButton>
                                 <ItemListaButton onClick={quantidadeVerticesArestas} schemaColor={false} buttonName={"Contador"} describe={"Retorna a contagem de vertices e arestas."} ></ItemListaButton>
                                 <ItemListaButton onClick={obterGrauVertice} schemaColor={true} buttonName={"Verifica Grau."} describe={"Retorna o grau de um vertice."} ></ItemListaButton>
@@ -315,7 +323,8 @@ export default function Home() {
                                 <ItemListaButton onClick={verificarCiclo} schemaColor={false} buttonName={"Ciclo."} describe={"Verifica se há ciclo no grafo."} ></ItemListaButton>
                                 <ItemListaButton onClick={obterOrdenacaoTopologica} schemaColor={true} buttonName={"Ordenação Topologica."} describe={"Retorna a ordenação topologica."} ></ItemListaButton>
                                 <ItemListaButton onClick={obterFortementeConexo} schemaColor={false} buttonName={"Fortemente Conexo."} describe={"Retorna os grupos conexos."} ></ItemListaButton>
-                                <tr className="bg-gray-50">
+                                <ItemListaButton onClick={verificarAresta} schemaColor={true} buttonName={"Verificar Aresta"} describe={"Verifica se existe uma determinada aresta."} ></ItemListaButton>
+                                <tr className="">
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-900">
                                     <button onClick={criaGrafoDoForm} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded w-full">
                                       Cria um grafo.
