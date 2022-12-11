@@ -44,8 +44,30 @@ export default function Home() {
   function criaGrafoDoForm() {
     console.log(formularioCriaGrafo);
     clear()
-    formularioCriaGrafo.split("\n")
-    //grafo.Edges.add({id:}) fzr algo tem grafo.addEdge() e grafo.addNode()
+    var nodesMap = new Map<string,number>();
+    var edgesText = formularioCriaGrafo.split("\n");
+    var contador:number = 0;
+    edgesText.map((ed) => {
+      var edg:string[] = ed.split(" ");
+      if(!nodesMap.has(edg[0])) {
+        nodesMap.set(edg[0], contador);
+        contador++;
+      }
+      if(!nodesMap.has(edg[1])) {
+        nodesMap.set(edg[1], contador);
+        contador++;
+      }
+    })
+    console.log(nodesMap);
+    nodesMap.forEach((v, k) => {
+      grafo.addNode(v, k);
+    })
+    edgesText.map((ed) => {
+      var respostas:string[] = ed.split(" ");
+      if (respostas.length == 3) {
+        grafo.addEdge(Number(nodesMap.get(respostas[0])), Number(nodesMap.get(respostas[1])), respostas[2]);
+      }
+    })   
   }
 
   function clear() {
@@ -57,9 +79,9 @@ export default function Home() {
   }
 
   function verificarAresta() {
-    var vertices = prompt("Digite os vertices")?.split(" ");
-    if (vertices?.length == 2) {
-      var [verticeA, verticeB] = vertices;
+    var verticeA = prompt("Digite a origem")?.split(" ")[0];
+    var verticeB = prompt("Digite o destino")?.split(" ")[0];
+    if (verticeA != null && verticeB != null) {
       const resp = api.verificarAresta(verticeA, verticeB, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Existe um vertice entre" + verticeA + " e " + verticeB + " : " + e);
@@ -250,7 +272,7 @@ export default function Home() {
         //window.open("/resposta", "_blank")
         setLogFunctions([
           ...logFunctions,
-          `Ordenação topologica do vertice ${origem} -> ${e.nodes.map((e) => {return e.label})}`
+          `Ordenação topologica do vertice ${origem} -> ${e.nodes.map((e) => { return e.label })}`
         ])
       }).catch((e) => {
         console.log(e);
@@ -277,20 +299,18 @@ export default function Home() {
     if (api == null) {
       console.log("bug buscaLargura")
     }
-    var vertices = prompt("Digite os vertices")?.split(" ");
-    if (vertices?.length == 2) {
-      const [origem, destino] = vertices;
-      if (origem != null) {
-        const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
-        resp.then((e) => {
-          setLogFunctions([
-            ...logFunctions,
-            `Busca em lagura: ${e}`
-          ])
-        }).catch((e) => {
-          console.log(e);
-        })
-      }
+    var origem = prompt("Digite a origem")?.split(" ")[0];
+    var destino = prompt("Digite o destino")?.split(" ")[0];
+    if (origem != null && destino != null) {
+      const resp = api.buscaLargura(origem, destino, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
+      resp.then((e) => {
+        setLogFunctions([
+          ...logFunctions,
+          `Busca em lagura: ${e}`
+        ])
+      }).catch((e) => {
+        console.log(e);
+      })
     }
   }
 
