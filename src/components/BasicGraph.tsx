@@ -30,10 +30,10 @@ const optionsDefault: Options = {
     clickToUse: false,
     layout: {
         hierarchical: {
-            enabled: false,
+            enabled: true,
             direction: 'LR',
             sortMethod: 'directed',
-            shakeTowards: 'leaves',
+            shakeTowards: 'roots',
         }
     },
     edges: {
@@ -75,6 +75,7 @@ const optionsDefault: Options = {
             callback(edgeData);
         },
     },
+    physics: false   
 }
 
 

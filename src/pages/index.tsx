@@ -1,15 +1,14 @@
+import { Textarea } from '@material-tailwind/react';
 import MailIcon from '@mui/icons-material/Mail';
 import { Badge } from "@mui/material";
-import Link from 'next/link';
+import { removeCookies, setCookie } from 'cookies-next';
 import "node_modules/vis-network/dist/dist/vis-network.min.css";
 import { useEffect, useRef, useState } from 'react';
 import { Grafo } from '../components/BasicGraph';
-import { Terminal } from '../components/Terminal';
-import GrafoApi, { GrafoModel } from './api/api';
-import { setCookie } from 'cookies-next';
 import ItemListaButton from '../components/ItemListaButton';
 import ItemListaCheckBox from '../components/ItemListaCheckBox';
-import { Textarea } from '@material-tailwind/react';
+import { Terminal } from '../components/Terminal';
+import GrafoApi from './api/api';
 
 export default function Home() {
   const grafoDiv = useRef(null);
@@ -48,7 +47,7 @@ export default function Home() {
     formularioCriaGrafo.split("\n")
     //grafo.Edges.add({id:}) fzr algo tem grafo.addEdge() e grafo.addNode()
   }
-  
+
   function clear() {
     grafo.Nodes.clear();
     grafo.Edges.clear();
@@ -58,9 +57,6 @@ export default function Home() {
   }
 
   function verificarAresta() {
-    if (api == null) {
-      console.log("bug verificar aresta")
-    }
     var vertices = prompt("Digite os vertices")?.split(" ");
     if (vertices?.length == 2) {
       var [verticeA, verticeB] = vertices;
@@ -71,7 +67,8 @@ export default function Home() {
           ...logFunctions,
           `Existe um vertice entre ${verticeA} e ${verticeB} : ${e}`
         ])
-
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -82,6 +79,7 @@ export default function Home() {
       const resp = api.classificarAresta(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
         console.log("Classificação: \n" + e);
+        removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
         setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
         var resposta: string = "";
@@ -93,6 +91,8 @@ export default function Home() {
           `Foi gerado a classificação do grafo. ${resposta}`
         ])
         return e;
+      }).catch((e) => {
+        console.log(e);
       })
       return resp;
     }
@@ -107,10 +107,15 @@ export default function Home() {
         const resp = api.prim(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
         resp.then((e) => {
           console.log("Prim: \n" + e);
+          removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
+          setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
+          window.open("/resposta", "_blank")
           setLogFunctions([
             ...logFunctions,
             `Prim a partide do v: ${origem} é ${e}`
           ])
+        }).catch((e) => {
+          console.log(e);
         })
       }
     }
@@ -124,12 +129,13 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterGrauVertice(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
-        console.log("Classificação: \n" + e);
         setLogFunctions([
           ...logFunctions,
           `O grau de ${origem} é ${e}`
         ])
         //alert("Classificação: \n" + e)
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -146,6 +152,8 @@ export default function Home() {
           ...logFunctions,
           `Lista de adj de ${origem} \{${e}\}`
         ])
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -160,8 +168,10 @@ export default function Home() {
       resp.then((e) => {
         setLogFunctions([
           ...logFunctions,
-          `Caminho a partir de v ${origem} ${e}`
+          `Caminho a partir da oridem ${origem}: ${e}`
         ])
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -174,12 +184,15 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterDijkstraPesosAtt(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
+        removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
         setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
         setLogFunctions([
           ...logFunctions,
           `Caminho a partir de v ${origem} foi calculado e aberto em nova pagina a resposta.`
         ])
+        console.log(e);
+      }).catch((e) => {
         console.log(e);
       })
     }
@@ -197,6 +210,8 @@ export default function Home() {
           ...logFunctions,
           `Há ciclo? v ${origem} ${e}`
         ])
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -209,12 +224,15 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterFortementeConexo(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
+        removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
         setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
         window.open("/resposta", "_blank")
         setLogFunctions([
           ...logFunctions,
           `Foi calculado os fortmentes conexos? origem: ${origem}`
         ])
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -227,10 +245,15 @@ export default function Home() {
     if (origem != null) {
       const resp = api.obterOrdenacaoTopologica(origem, grafo.Nodes, grafo.Edges, isMatrix, isDigrafo);
       resp.then((e) => {
+        //removeCookies("grafoResposta", { path: "/", maxAge: 3600, sameSite: true });
+        //setCookie("grafoResposta", e, { path: "/", maxAge: 3600, sameSite: true })
+        //window.open("/resposta", "_blank")
         setLogFunctions([
           ...logFunctions,
-          `Ordenação topologica do vertice ${origem} -> ${e}`
+          `Ordenação topologica do vertice ${origem} -> ${e.nodes.map((e) => {return e.label})}`
         ])
+      }).catch((e) => {
+        console.log(e);
       })
     }
   }
@@ -245,6 +268,8 @@ export default function Home() {
         ...logFunctions,
         `Quantidade de Vertices ${e.quantidadeVertice} Quantidade de Aresta ${e.quantidadeAresta}`
       ])
+    }).catch((e) => {
+      console.log(e);
     })
   }
 
@@ -262,6 +287,8 @@ export default function Home() {
             ...logFunctions,
             `Busca em lagura: ${e}`
           ])
+        }).catch((e) => {
+          console.log(e);
         })
       }
     }
@@ -334,7 +361,7 @@ export default function Home() {
                                     </button>
                                   </td>
                                   <td className="p-4 whitespace-nowrap text-sm font-normal text-gray-500">
-                                    <Textarea value={formularioCriaGrafo} onChange={e=>setformularioCriaGrafo(e.target.value)}></Textarea>
+                                    <Textarea value={formularioCriaGrafo} onChange={e => setformularioCriaGrafo(e.target.value)}></Textarea>
                                   </td>
                                 </tr>
                               </tbody>

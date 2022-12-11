@@ -27,7 +27,7 @@ export default function Resposta() {
     if (ed != null && nod != null) {
         grafo.Nodes.add(nod);
         grafo.Edges.add(ed);
-
+        grafo.Digrafo = grafoModel.digrafo!;
     }
 
     useEffect(() => {

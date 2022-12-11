@@ -25,6 +25,7 @@ export type GrafoModel = {
 	destino: string | null,
 	quantidadeAresta: number | null,
 	quantidadeVertice: number | null,
+	digrafo: boolean | null,
 	nodes: NodeModel[],
 	edges: EdgesModel[]
 }
@@ -41,7 +42,8 @@ export default class GrafoApi {
 			origem: verticeA,
 			destino: verticeB,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -70,7 +72,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -99,7 +102,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -128,7 +132,8 @@ export default class GrafoApi {
 	async quantidadeVerticesArestas(Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -158,7 +163,8 @@ export default class GrafoApi {
 			origem: verticeA,
 			destino: verticeB,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -188,7 +194,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -204,6 +211,7 @@ export default class GrafoApi {
 				}
 			})
 		}
+		console.log(grafo.edges);
 		if (matriz) {
 			const resp = (await this.api.post<number>("/matriz/obterGrauVertice/", grafo)).data;
 			return resp;
@@ -218,7 +226,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -248,7 +257,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -278,7 +288,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -308,7 +319,8 @@ export default class GrafoApi {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -334,11 +346,12 @@ export default class GrafoApi {
 	}
 
 
-	async obterFortementeConexo(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+	async obterFortementeConexo(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -355,19 +368,20 @@ export default class GrafoApi {
 			})
 		}
 		if (matriz) {
-			const resp = (await this.api.post<string[]>("/matriz/fortementeConexo/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/matriz/fortementeConexo/", grafo)).data;
 			return resp;
 		} else {
-			const resp = (await this.api.post<string[]>("/listaAdjacencia/fortementeConexo/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/listaAdjacencia/fortementeConexo/", grafo)).data;
 			return resp;
 		}
 	}
 
-	async obterOrdenacaoTopologica(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<string[]> {
+	async obterOrdenacaoTopologica(verticeA: string, Nodes: DataSet<Node>, Edges: DataSet<Edge>, matriz: boolean, digrafo: boolean): Promise<GrafoModel> {
 		var grafo = {
 			origem: verticeA,
 			nodes: Nodes.get(),
-			edges: Edges.get()
+			edges: Edges.get(),
+			digrafo: digrafo
 		}
 		if (!digrafo) {
 			grafo.edges.map((ed) => {
@@ -384,10 +398,10 @@ export default class GrafoApi {
 			})
 		}
 		if (matriz) {
-			const resp = (await this.api.post<string[]>("/matriz/ordenacaoTopologica/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/matriz/ordenacaoTopologica/", grafo)).data;
 			return resp;
 		} else {
-			const resp = (await this.api.post<string[]>("/listaAdjacencia/ordenacaoTopologica/", grafo)).data;
+			const resp = (await this.api.post<GrafoModel>("/listaAdjacencia/ordenacaoTopologica/", grafo)).data;
 			return resp;
 		}
 	}
